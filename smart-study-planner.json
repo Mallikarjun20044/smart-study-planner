@@ -1,0 +1,109 @@
+{
+  "name": "smart-study-planner",
+  "version": "1.0.0",
+  "description": "Intelligent study planning web application - 100% frontend, no backend required",
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/smart-study-planner.git"
+  },
+  "keywords": [
+    "study-planner",
+    "education",
+    "learning",
+    "web-app",
+    "frontend",
+    "no-backend",
+    "vercel",
+    "spaced-repetition"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "chart.js": "^3.9.1",
+    "fontawesome": "^6.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "deploy": "git push origin main"
+  },
+  "features": {
+    "authentication": "User registration and login with LocalStorage",
+    "study_planning": "Smart algorithm for distributing study hours",
+    "scheduling": "Automatic timetable generation with spaced repetition",
+    "progress_tracking": "Real-time statistics and progress visualization",
+    "responsive_design": "Mobile, tablet, and desktop support",
+    "offline_support": "Works without internet once loaded",
+    "data_privacy": "100% local storage - no server communication"
+  },
+  "pages": {
+    "index.html": "Landing page with features showcase",
+    "public/register.html": "User registration",
+    "public/login.html": "User authentication",
+    "public/dashboard.html": "Main dashboard with statistics",
+    "public/create-plan.html": "Study plan creation form",
+    "public/calendar.html": "Weekly calendar view",
+    "public/progress.html": "Progress tracking and analytics"
+  },
+  "algorithms": {
+    "smart_scheduling": {
+      "description": "Distributes study hours based on subject difficulty",
+      "weights": {
+        "easy": 1.0,
+        "medium": 1.5,
+        "hard": 2.5
+      },
+      "features": [
+        "Difficulty-weighted allocation",
+        "Spaced repetition scheduling",
+        "Daily schedule generation",
+        "Break management",
+        "Load balancing"
+      ]
+    }
+  },
+  "storage": {
+    "type": "LocalStorage",
+    "tables": [
+      "users",
+      "currentUser",
+      "studyPlans",
+      "progress"
+    ]
+  },
+  "deployment": {
+    "platform": "Vercel",
+    "buildCommand": "None (static files)",
+    "environments": ["Development", "Production"],
+    "notes": "Zero configuration needed, pure static hosting"
+  },
+  "compatibility": {
+    "browsers": {
+      "Chrome": "90+",
+      "Firefox": "88+",
+      "Safari": "14+",
+      "Edge": "90+",
+      "Mobile": "All modern mobile browsers"
+    },
+    "devices": ["Desktop", "Tablet", "Mobile"],
+    "responsive": true
+  },
+  "fileStats": {
+    "html_files": 7,
+    "css_files": 1,
+    "js_files": 2,
+    "total_files": 10,
+    "css_size_kb": 35,
+    "js_size_kb": 40,
+    "total_size_kb": 75
+  },
+  "colors": {
+    "primary": "#5C5DFF",
+    "secondary": "#00D4FF",
+    "accent": "#FF006E",
+    "success": "#00F5A0",
+    "tertiary": "#5A7FDB",
+    "dark": "#0F1419"
+  }
+}

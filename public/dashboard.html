@@ -1,0 +1,194 @@
+<!-- ============================================
+   SMART STUDY PLANNER - DASHBOARD PAGE
+   ============================================
+   
+   Main dashboard showing:
+   - Statistics cards (subjects, topics, progress)
+   - Today's study plan
+   - Progress chart
+   - Navigation sidebar
+   
+   ============================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Smart Study Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  </head>
+  <body>
+    <!-- ===============================
+        NAVIGATION BAR
+        =============================== -->
+    <nav>
+      <div class="container nav-container">
+        <div class="logo">
+          <i class="fas fa-graduation-cap"></i> Smart Study Planner
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span id="userName" style="color: var(--secondary); font-weight: 600;"></span>
+          <button id="logoutBtn" class="btn btn-accent btn-small">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===============================
+        SIDEBAR NAVIGATION
+        =============================== -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <i class="fas fa-graduation-cap"></i> Smart Study
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="dashboard.html" class="active">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="create-plan.html">
+            <i class="fas fa-file-alt"></i> Create Plan
+          </a>
+        </li>
+        <li>
+          <a href="calendar.html">
+            <i class="fas fa-calendar-alt"></i> Calendar
+          </a>
+        </li>
+        <li>
+          <a href="progress.html">
+            <i class="fas fa-tasks"></i> Progress
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ===============================
+        MAIN CONTENT
+        =============================== -->
+    <div class="main-content">
+      <!-- Page Header -->
+      <div style="margin-bottom: 40px;">
+        <h1 style="margin-bottom: 10px;">📊 Your Study Dashboard</h1>
+        <p style="color: rgba(255, 255, 255, 0.7);">Welcome back! Here's your study progress.</p>
+      </div>
+
+      <!-- Statistics Grid -->
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="totalSubjects">0</div>
+          <div class="stat-label">Total Subjects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="completedTopics">0</div>
+          <div class="stat-label">Completed Topics</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pendingTopics">0</div>
+          <div class="stat-label">Pending Topics</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="daysLeft">0</div>
+          <div class="stat-label">Days Left</div>
+        </div>
+      </div>
+
+      <!-- Overall Progress -->
+      <div class="card" style="margin-bottom: 30px;">
+        <h2 style="margin-bottom: 20px;">📈 Overall Progress</h2>
+        <div class="progress-bar" style="height: 12px; margin-bottom: 10px;">
+          <div class="progress-fill" id="overallProgress" style="width: 0%;"></div>
+        </div>
+        <p style="color: rgba(255, 255, 255, 0.7);">Keep pushing! Every topic completed brings you closer to success.</p>
+      </div>
+
+      <!-- Today's Study Plan -->
+      <div class="card" style="margin-bottom: 30px;">
+        <h2 style="margin-bottom: 20px;">📅 Today's Study Plan</h2>
+        <div id="todaysPlanContainer">
+          <p style="color: rgba(255, 255, 255, 0.7); text-align: center;">Loading today's schedule...</p>
+        </div>
+      </div>
+
+      <!-- Progress Chart -->
+      <div class="card">
+        <h2 style="margin-bottom: 20px;">📊 Subject Progress Chart</h2>
+        <div style="position: relative; height: 300px;">
+          <canvas id="progressChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap;">
+        <a href="create-plan.html" class="btn btn-primary">
+          <i class="fas fa-plus-circle"></i> New Study Plan
+        </a>
+        <a href="progress.html" class="btn btn-secondary">
+          <i class="fas fa-chart-pie"></i> View Detailed Progress
+        </a>
+        <a href="calendar.html" class="btn btn-accent">
+          <i class="fas fa-calendar-check"></i> View Calendar
+        </a>
+      </div>
+    </div>
+
+    <!-- Custom Styles for Today's Sessions -->
+    <style>
+      .today-sessions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+      }
+
+      .session-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .session-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+      }
+
+      .session-time {
+        font-size: 0.9rem;
+        color: #00F5A0;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .session-subject {
+        font-weight: 600;
+        color: var(--lighter);
+        margin-bottom: 5px;
+      }
+
+      .session-topic {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 8px;
+      }
+
+      .session-type {
+        font-size: 0.8rem;
+        color: #00D4FF;
+        font-weight: 500;
+      }
+    </style>
+
+    <!-- Scripts -->
+    <script src="js/algorithm.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

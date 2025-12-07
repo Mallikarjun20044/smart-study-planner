@@ -1,0 +1,224 @@
+<!-- ============================================
+   SMART STUDY PLANNER - CALENDAR PAGE
+   ============================================
+   
+   Interactive calendar view showing:
+   - Weekly schedule with all study sessions
+   - Color-coded subjects
+   - Session details
+   - Progress visualization
+   
+   ============================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar - Smart Study Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- ===============================
+        NAVIGATION BAR
+        =============================== -->
+    <nav>
+      <div class="container nav-container">
+        <div class="logo">
+          <i class="fas fa-graduation-cap"></i> Smart Study Planner
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span id="userName" style="color: var(--secondary); font-weight: 600;"></span>
+          <button id="logoutBtn" class="btn btn-accent btn-small">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===============================
+        SIDEBAR NAVIGATION
+        =============================== -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <i class="fas fa-graduation-cap"></i> Smart Study
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="dashboard.html">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="create-plan.html">
+            <i class="fas fa-file-alt"></i> Create Plan
+          </a>
+        </li>
+        <li>
+          <a href="calendar.html" class="active">
+            <i class="fas fa-calendar-alt"></i> Calendar
+          </a>
+        </li>
+        <li>
+          <a href="progress.html">
+            <i class="fas fa-tasks"></i> Progress
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ===============================
+        MAIN CONTENT
+        =============================== -->
+    <div class="main-content">
+      <!-- Page Header -->
+      <div style="margin-bottom: 40px;">
+        <h1 style="margin-bottom: 10px;">📅 Study Calendar</h1>
+        <p style="color: rgba(255, 255, 255, 0.7);">
+          Your personalized study schedule with color-coded subjects and session details.
+        </p>
+      </div>
+
+      <!-- Calendar -->
+      <div class="card">
+        <h2 style="margin-bottom: 20px;">Week Overview</h2>
+        <div id="calendarContainer">
+          <p style="color: rgba(255, 255, 255, 0.7); text-align: center;">
+            Loading your study calendar...
+          </p>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="card" style="margin-top: 30px;">
+        <h2 style="margin-bottom: 20px;">Legend</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #5C5DFF, #00D4FF); border-radius: 4px;"></div>
+            <span>Study Session</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 20px; height: 20px; background: #00F5A0; border-radius: 4px;"></div>
+            <span>Revision Session</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-check" style="color: #FF006E; font-size: 20px;"></i>
+            <span>Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div
+        class="card"
+        style="
+          margin-top: 30px;
+          background: linear-gradient(135deg, rgba(92, 93, 255, 0.1), rgba(0, 212, 255, 0.1));
+          border-left: 4px solid var(--secondary);
+        "
+      >
+        <h2 style="margin-bottom: 15px;">💡 Study Tips</h2>
+        <ul style="color: rgba(255, 255, 255, 0.8); margin-left: 20px;">
+          <li style="margin-bottom: 10px;">
+            <strong>Consistency is Key:</strong> Try to follow the schedule daily for best results
+          </li>
+          <li style="margin-bottom: 10px;">
+            <strong>Spaced Repetition:</strong> Revision sessions are scheduled using proven memory techniques
+          </li>
+          <li style="margin-bottom: 10px;">
+            <strong>Take Breaks:</strong> The schedule includes breaks between sessions
+          </li>
+          <li style="margin-bottom: 10px;">
+            <strong>Review Progress:</strong> Check your progress page regularly to stay motivated
+          </li>
+          <li>
+            <strong>Adapt as Needed:</strong> Feel free to adjust based on your pace and understanding
+          </li>
+        </ul>
+      </div>
+
+      <!-- Back Link -->
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="dashboard.html" style="color: var(--secondary); text-decoration: none;">
+          <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Styles for Calendar -->
+    <style>
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .calendar-slot {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 12px;
+        min-height: 120px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .calendar-slot:hover {
+        transform: translateY(-3px);
+        border-color: var(--secondary);
+        background: rgba(0, 212, 255, 0.05);
+      }
+
+      .calendar-slot.filled {
+        border: 1px solid var(--secondary);
+        background: linear-gradient(135deg, rgba(92, 93, 255, 0.1), rgba(0, 212, 255, 0.05));
+      }
+
+      .calendar-header {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 12px;
+        margin-bottom: 15px;
+      }
+
+      .calendar-day {
+        text-align: center;
+        font-weight: 600;
+        padding: 12px;
+        background: rgba(92, 93, 255, 0.1);
+        border-radius: 8px;
+        color: var(--secondary);
+      }
+
+      @media (max-width: 1024px) {
+        .calendar-grid,
+        .calendar-header {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .calendar-grid,
+        .calendar-header {
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 8px;
+        }
+
+        .calendar-slot {
+          min-height: 100px;
+          padding: 8px;
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+
+    <!-- Scripts -->
+    <script src="js/algorithm.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

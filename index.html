@@ -1,0 +1,390 @@
+<!-- ============================================
+   SMART STUDY PLANNER - LANDING PAGE
+   ============================================
+   
+   Main entry point for the application.
+   Features a hero section, features showcase, 
+   and call-to-action buttons.
+   
+   Vercel Deployment: This is the root index.html
+   All CSS and JS are in /public folder
+   
+   ============================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Study Planner - Plan Smart, Study Better</title>
+    <link rel="stylesheet" href="public/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- ===============================
+        NAVIGATION BAR
+        =============================== -->
+    <nav>
+      <div class="container nav-container">
+        <div class="logo">
+          <i class="fas fa-graduation-cap"></i> Smart Study Planner
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- ===============================
+        HERO SECTION
+        =============================== -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Smart Study Planner</h1>
+        <p class="hero-tagline">Plan Smart. Study Better. Achieve More.</p>
+        <p style="font-size: 1.1rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 30px;">
+          Intelligent study scheduling with adaptive algorithms and spaced repetition
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i> Get Started
+          </button>
+          <button class="btn btn-secondary" id="createPlanBtn">
+            <i class="fas fa-calendar-check"></i> Create Plan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================
+        FEATURES SECTION
+        =============================== -->
+    <section class="section" id="features">
+      <div class="container">
+        <h2 style="text-align: center; margin-bottom: 50px;">🚀 Key Features</h2>
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>Smart Scheduling</h3>
+            <p>
+              Our intelligent algorithm automatically distributes study hours based on
+              subject difficulty and topic count.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Spaced Repetition</h3>
+            <p>
+              Scientifically-proven revision schedule ensures better retention and
+              long-term memory.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Progress Tracking</h3>
+            <p>
+              Beautiful dashboard with detailed analytics and progress visualization to
+              keep you motivated.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card">
+            <div class="feature-icon">📅</div>
+            <h3>Interactive Calendar</h3>
+            <p>
+              Visualize your entire study plan on a color-coded calendar with daily
+              schedules.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="feature-card">
+            <div class="feature-icon">💾</div>
+            <h3>Local Storage</h3>
+            <p>
+              All your data is stored securely in your browser - no servers, no privacy
+              concerns.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>100% Responsive</h3>
+            <p>
+              Works perfectly on all devices - desktop, tablet, and mobile. Study
+              anywhere, anytime.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================
+        HOW IT WORKS SECTION
+        =============================== -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <h2 style="text-align: center; margin-bottom: 50px;">⚙️ How It Works</h2>
+        <div class="features-grid">
+          <!-- Step 1 -->
+          <div class="card">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <div
+                style="
+                  display: inline-block;
+                  width: 50px;
+                  height: 50px;
+                  background: linear-gradient(135deg, #5C5DFF, #00D4FF);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 24px;
+                "
+              >
+                1️⃣
+              </div>
+            </div>
+            <h3 style="text-align: center;">Sign Up</h3>
+            <p style="text-align: center;">
+              Create your account with just your name, email, and password. Takes less than
+              a minute!
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="card">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <div
+                style="
+                  display: inline-block;
+                  width: 50px;
+                  height: 50px;
+                  background: linear-gradient(135deg, #FF006E, #FFB800);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 24px;
+                "
+              >
+                2️⃣
+              </div>
+            </div>
+            <h3 style="text-align: center;">Create Plan</h3>
+            <p style="text-align: center;">
+              Add your subjects, set difficulty levels, and specify your exam date. The
+              algorithm does the rest!
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="card">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <div
+                style="
+                  display: inline-block;
+                  width: 50px;
+                  height: 50px;
+                  background: linear-gradient(135deg, #00F5A0, #00D4FF);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 24px;
+                "
+              >
+                3️⃣
+              </div>
+            </div>
+            <h3 style="text-align: center;">Study</h3>
+            <p style="text-align: center;">
+              Follow your personalized study schedule with daily tasks and revision
+              reminders.
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="card">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <div
+                style="
+                  display: inline-block;
+                  width: 50px;
+                  height: 50px;
+                  background: linear-gradient(135deg, #5A7FDB, #FF006E);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 24px;
+                "
+              >
+                4️⃣
+              </div>
+            </div>
+            <h3 style="text-align: center;">Track</h3>
+            <p style="text-align: center;">
+              Monitor your progress with beautiful charts and mark topics as completed.
+            </p>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="card">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <div
+                style="
+                  display: inline-block;
+                  width: 50px;
+                  height: 50px;
+                  background: linear-gradient(135deg, #FFB800, #FF006E);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 24px;
+                "
+              >
+                5️⃣
+              </div>
+            </div>
+            <h3 style="text-align: center;">Succeed</h3>
+            <p style="text-align: center;">
+              Stay consistent, follow the plan, and ace your exams with confidence!
+            </p>
+          </div>
+
+          <!-- Bonus -->
+          <div class="card">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <div
+                style="
+                  display: inline-block;
+                  width: 50px;
+                  height: 50px;
+                  background: linear-gradient(135deg, #00D4FF, #00F5A0);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 24px;
+                "
+              >
+                🏆
+              </div>
+            </div>
+            <h3 style="text-align: center;">Celebrate</h3>
+            <p style="text-align: center;">
+              Achieve your academic goals and celebrate your success with comprehensive
+              analytics!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================
+        TECH STACK SECTION
+        =============================== -->
+    <section class="section">
+      <div class="container">
+        <h2 style="text-align: center; margin-bottom: 50px;">🛠️ Built With Modern Tech</h2>
+        <div class="features-grid">
+          <div class="card text-center">
+            <div style="font-size: 2rem; margin-bottom: 10px;">📄</div>
+            <h3>HTML5</h3>
+            <p>Semantic markup for better accessibility and SEO</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🎨</div>
+            <h3>CSS3</h3>
+            <p>Modern styling with gradients, animations, and glass-morphism</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size: 2rem; margin-bottom: 10px;">⚡</div>
+            <h3>JavaScript</h3>
+            <p>Vanilla JS with no dependencies for maximum performance</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size: 2rem; margin-bottom: 10px;">💾</div>
+            <h3>LocalStorage</h3>
+            <p>100% frontend data persistence - no backend needed</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size: 2rem; margin-bottom: 10px;">📊</div>
+            <h3>Chart.js</h3>
+            <p>Beautiful visualizations for progress tracking</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🚀</div>
+            <h3>Vercel Ready</h3>
+            <p>Deploy instantly with zero configuration needed</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================
+        CTA SECTION
+        =============================== -->
+    <section class="section" style="padding: 80px 0;">
+      <div class="container text-center">
+        <h2 style="margin-bottom: 30px; font-size: 2.5rem;">Ready to Ace Your Exams?</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 40px; color: rgba(255, 255, 255, 0.8);">
+          Start your smart study journey today - completely free, no sign-up fees!
+        </p>
+        <button class="btn btn-primary" style="padding: 15px 40px; font-size: 1.1rem;" id="ctaBtn">
+          <i class="fas fa-rocket"></i> Get Started Now
+        </button>
+      </div>
+    </section>
+
+    <!-- ===============================
+        FOOTER
+        =============================== -->
+    <footer
+      style="
+        background: rgba(15, 20, 25, 0.8);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 40px 0;
+        text-align: center;
+      "
+    >
+      <div class="container">
+        <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 10px;">
+          &copy; 2024 Smart Study Planner. All rights reserved.
+        </p>
+        <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem;">
+          Built with <i class="fas fa-heart" style="color: #FF006E;"></i> for students who want
+          to study smarter.
+        </p>
+        <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; margin-top: 15px;">
+          <i class="fas fa-lock"></i> 100% Private - Your data never leaves your device
+        </p>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="public/js/algorithm.js"></script>
+    <script src="public/js/main.js"></script>
+    <script>
+      // CTA button handler
+      document.getElementById('ctaBtn').addEventListener('click', () => {
+        window.location.href = 'public/register.html';
+      });
+    </script>
+  </body>
+</html>

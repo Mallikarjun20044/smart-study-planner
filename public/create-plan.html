@@ -1,0 +1,218 @@
+<!-- ============================================
+   SMART STUDY PLANNER - CREATE PLAN PAGE
+   ============================================
+   
+   Dynamic form to:
+   - Add multiple subjects
+   - Set difficulty levels
+   - Specify topics count
+   - Set exam date
+   - Set available hours per day
+   
+   Uses Smart Algorithm to generate schedule.
+   
+   ============================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Study Plan - Smart Study Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- ===============================
+        NAVIGATION BAR
+        =============================== -->
+    <nav>
+      <div class="container nav-container">
+        <div class="logo">
+          <i class="fas fa-graduation-cap"></i> Smart Study Planner
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span id="userName" style="color: var(--secondary); font-weight: 600;"></span>
+          <button id="logoutBtn" class="btn btn-accent btn-small">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===============================
+        SIDEBAR NAVIGATION
+        =============================== -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <i class="fas fa-graduation-cap"></i> Smart Study
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="dashboard.html">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="create-plan.html" class="active">
+            <i class="fas fa-file-alt"></i> Create Plan
+          </a>
+        </li>
+        <li>
+          <a href="calendar.html">
+            <i class="fas fa-calendar-alt"></i> Calendar
+          </a>
+        </li>
+        <li>
+          <a href="progress.html">
+            <i class="fas fa-tasks"></i> Progress
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ===============================
+        MAIN CONTENT
+        =============================== -->
+    <div class="main-content">
+      <!-- Page Header -->
+      <div style="margin-bottom: 40px;">
+        <h1 style="margin-bottom: 10px;">✨ Create Your Study Plan</h1>
+        <p style="color: rgba(255, 255, 255, 0.7);">
+          Fill in your subjects and exam details. Our smart algorithm will generate a personalized study schedule.
+        </p>
+      </div>
+
+      <!-- Create Plan Form -->
+      <div class="card" style="max-width: 800px;">
+        <form id="createPlanForm">
+          <!-- Exam Date -->
+          <div class="form-group">
+            <label for="examDate">
+              <i class="fas fa-calendar"></i> Exam Date
+            </label>
+            <input type="date" id="examDate" required />
+            <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-top: 5px;">
+              Select your target exam date
+            </p>
+          </div>
+
+          <!-- Available Hours per Day -->
+          <div class="form-group">
+            <label for="hoursPerDay">
+              <i class="fas fa-clock"></i> Available Study Hours Per Day
+            </label>
+            <input
+              type="number"
+              id="hoursPerDay"
+              min="1"
+              max="24"
+              step="0.5"
+              placeholder="e.g., 4"
+              value="4"
+              required
+            />
+            <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-top: 5px;">
+              How many hours can you study daily?
+            </p>
+          </div>
+
+          <!-- Subjects Section -->
+          <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2>📚 Subjects</h2>
+              <button type="button" class="btn btn-success btn-small" id="addSubjectBtn">
+                <i class="fas fa-plus"></i> Add Subject
+              </button>
+            </div>
+
+            <!-- Subjects Container -->
+            <div id="subjectsContainer">
+              <!-- First subject field -->
+              <div class="subject-field card" style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                  <h3>Subject 1</h3>
+                  <button type="button" class="btn btn-accent btn-small" onclick="SmartStudyApp.removeSubjectField(this)" style="display: none;">
+                    Remove
+                  </button>
+                </div>
+                <div class="form-group">
+                  <label>Subject Name</label>
+                  <input type="text" class="subject-name" placeholder="e.g., Data Structures, DBMS, OS, Web Technology, Algorithms" required />
+                </div>
+                <div class="form-group">
+                  <label>Difficulty Level</label>
+                  <select class="subject-difficulty" required>
+                    <option value="">Select difficulty</option>
+                    <option value="easy">Easy (Less Important)</option>
+                    <option value="medium">Medium (Moderate Importance)</option>
+                    <option value="hard">Hard (Very Important)</option>
+                  </select>
+                  <p style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.5); margin-top: 5px;">
+                    Higher difficulty = more study time allocated
+                  </p>
+                </div>
+                <div class="form-group">
+                  <label>Number of Topics</label>
+                  <input
+                    type="number"
+                    class="subject-topics"
+                    min="1"
+                    max="50"
+                    placeholder="10"
+                    value="10"
+                    required
+                  />
+                  <p style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.5); margin-top: 5px;">
+                    How many topics in this subject?
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Algorithm Info -->
+            <div
+              style="
+                margin-top: 20px;
+                padding: 15px;
+                background: rgba(0, 245, 160, 0.1);
+                border-left: 4px solid #00F5A0;
+                border-radius: 8px;
+              "
+            >
+              <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">
+                <i class="fas fa-lightbulb"></i> <strong>Smart Algorithm:</strong>
+              </p>
+              <ul style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); margin-top: 8px; margin-left: 20px;">
+                <li>✓ Hard subjects get 2.5x more study hours</li>
+                <li>✓ Medium subjects get 1.5x more study hours</li>
+                <li>✓ Easy subjects get standard allocation</li>
+                <li>✓ Automatic revision scheduling (spaced repetition)</li>
+                <li>✓ Daily schedule generation with breaks</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 30px; padding: 15px; font-size: 1.05rem;">
+            <i class="fas fa-magic"></i> Generate Smart Study Plan
+          </button>
+        </form>
+      </div>
+
+      <!-- Back Link -->
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="dashboard.html" style="color: var(--secondary); text-decoration: none;">
+          <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/algorithm.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

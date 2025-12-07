@@ -1,0 +1,128 @@
+<!-- ============================================
+   SMART STUDY PLANNER - REGISTER PAGE
+   ============================================
+   
+   User registration form with validation.
+   Stores user data in LocalStorage.
+   Redirects to login on successful registration.
+   
+   ============================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Smart Study Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- ===============================
+        NAVIGATION BAR
+        =============================== -->
+    <nav>
+      <div class="container nav-container">
+        <div class="logo">
+          <i class="fas fa-graduation-cap"></i> Smart Study Planner
+        </div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- ===============================
+        REGISTER CONTAINER
+        =============================== -->
+    <div style="min-height: 90vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+      <div class="card" style="max-width: 450px; width: 100%; animation: bounceIn 0.5s ease-out;">
+        <h1 style="text-align: center; margin-bottom: 30px;">Create Account</h1>
+
+        <form id="registerForm">
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="regName">
+              <i class="fas fa-user"></i> Full Name
+            </label>
+            <input
+              type="text"
+              id="regName"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="regEmail">
+              <i class="fas fa-envelope"></i> Email Address
+            </label>
+            <input
+              type="email"
+              id="regEmail"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="regPassword">
+              <i class="fas fa-lock"></i> Password
+            </label>
+            <input
+              type="password"
+              id="regPassword"
+              placeholder="Create a strong password (min 6 characters)"
+              required
+            />
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <label for="regConfirmPassword">
+              <i class="fas fa-lock"></i> Confirm Password
+            </label>
+            <input
+              type="password"
+              id="regConfirmPassword"
+              placeholder="Confirm your password"
+              required
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">
+            <i class="fas fa-user-plus"></i> Create Account
+          </button>
+        </form>
+
+        <!-- Login Link -->
+        <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+          <p style="color: rgba(255, 255, 255, 0.7);">
+            Already have an account?
+            <a href="login.html" style="color: var(--secondary); font-weight: 600;">
+              Login here
+            </a>
+          </p>
+        </div>
+
+        <!-- Features Info -->
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+          <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); text-align: center;">
+            <i class="fas fa-shield-alt"></i> Your data is secure and stored locally on your device
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/algorithm.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

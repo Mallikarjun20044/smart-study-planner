@@ -1,0 +1,135 @@
+<!-- ============================================
+   SMART STUDY PLANNER - LOGIN PAGE
+   ============================================
+   
+   User login form with authentication.
+   Validates credentials against LocalStorage.
+   Redirects to dashboard on successful login.
+   
+   ============================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Smart Study Planner</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- ===============================
+        NAVIGATION BAR
+        =============================== -->
+    <nav>
+      <div class="container nav-container">
+        <div class="logo">
+          <i class="fas fa-graduation-cap"></i> Smart Study Planner
+        </div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="register.html">Register</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- ===============================
+        LOGIN CONTAINER
+        =============================== -->
+    <div style="min-height: 90vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+      <div class="card" style="max-width: 450px; width: 100%; animation: bounceIn 0.5s ease-out;">
+        <h1 style="text-align: center; margin-bottom: 30px;">Welcome Back</h1>
+
+        <form id="loginForm">
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="loginEmail">
+              <i class="fas fa-envelope"></i> Email Address
+            </label>
+            <input
+              type="email"
+              id="loginEmail"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="loginPassword">
+              <i class="fas fa-lock"></i> Password
+            </label>
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+        </form>
+
+        <!-- Register Link -->
+        <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+          <p style="color: rgba(255, 255, 255, 0.7);">
+            Don't have an account?
+            <a href="register.html" style="color: var(--secondary); font-weight: 600;">
+              Register now
+            </a>
+          </p>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div
+          style="
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00D4FF;
+            border-radius: 8px;
+          "
+        >
+          <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 8px;">
+            <i class="fas fa-lightbulb"></i> Demo Account:
+          </p>
+          <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
+            Email: <code style="background: rgba(0, 0, 0, 0.3); padding: 2px 6px; border-radius: 3px;">mallikarjunbaradenal@gmail.com</code>
+          </p>
+          <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
+            Password: <code style="background: rgba(0, 0, 0, 0.3); padding: 2px 6px; border-radius: 3px;">Mallu@123</code>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/algorithm.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      // Auto-create demo account on first visit
+      window.addEventListener('load', () => {
+        const users = JSON.parse(localStorage.getItem('users'));
+        const demoExists = users.some((u) => u.email === 'mallikarjunbaradenal@gmail.com');
+
+        if (!demoExists) {
+          const demoUser = {
+            id: Date.now(),
+            name: 'Mallikarjun',
+            email: 'mallikarjunbaradenal@gmail.com',
+            password: SmartStudyApp.hashPassword('Mallu@123'),
+            createdAt: new Date().toISOString(),
+          };
+          users.push(demoUser);
+          localStorage.setItem('users', JSON.stringify(users));
+        }
+      });
+    </script>
+  </body>
+</html>
