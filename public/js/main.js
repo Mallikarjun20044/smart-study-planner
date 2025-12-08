@@ -684,12 +684,21 @@ class SmartStudyApp {
   static initProgressPage() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const studyPlans = JSON.parse(localStorage.getItem('studyPlans'));
+    
+    if (!currentUser) {
+      console.error('No current user found');
+      return;
+    }
+    
     const userPlan = studyPlans[currentUser.id];
 
     if (userPlan) {
+      console.log('Initializing progress page with plan:', userPlan);
       this.renderProgressChecklist(userPlan);
       this.renderProgressChart(userPlan);
       this.renderProgressStatistics(userPlan);
+    } else {
+      console.error('No study plan found for user:', currentUser.id);
     }
   }
 
@@ -795,33 +804,45 @@ class SmartStudyApp {
 
     container.innerHTML = html;
     
-    // Update milestone highlights
-    this.updateMilestones(completionPercentage);
+    // Update milestone highlights after a small delay to ensure DOM is ready
+    setTimeout(() => {
+      this.updateMilestones(completionPercentage);
+    }, 100);
   }
 
   /**
    * Update milestone highlighting based on progress
    */
   static updateMilestones(completionPercentage) {
+    console.log('Updating milestones with progress:', completionPercentage + '%');
+    
     const milestones = [
-      { threshold: 25, selector: 'milestone-25' },
-      { threshold: 50, selector: 'milestone-50' },
-      { threshold: 75, selector: 'milestone-75' },
-      { threshold: 100, selector: 'milestone-100' }
+      { threshold: 25, selector: 'milestone-25', color: 'rgba(0, 212, 255, 0.4)' },
+      { threshold: 50, selector: 'milestone-50', color: 'rgba(92, 93, 255, 0.4)' },
+      { threshold: 75, selector: 'milestone-75', color: 'rgba(255, 184, 0, 0.4)' },
+      { threshold: 100, selector: 'milestone-100', color: 'rgba(0, 245, 160, 0.4)' }
     ];
 
     milestones.forEach(milestone => {
       const element = document.getElementById(milestone.selector);
       if (element) {
         if (completionPercentage >= milestone.threshold) {
+          // Achieved milestone - highlighted
           element.style.opacity = '1';
           element.style.transform = 'scale(1.05)';
-          element.style.boxShadow = '0 8px 16px rgba(0, 245, 160, 0.3)';
+          element.style.boxShadow = `0 8px 20px ${milestone.color}`;
+          element.style.border = '2px solid rgba(0, 245, 160, 0.6)';
+          console.log(`✓ Milestone ${milestone.threshold}% achieved`);
         } else {
-          element.style.opacity = '0.5';
+          // Not achieved - dimmed
+          element.style.opacity = '0.4';
           element.style.transform = 'scale(1)';
           element.style.boxShadow = 'none';
+          element.style.border = '2px solid rgba(255, 255, 255, 0.1)';
+          console.log(`✗ Milestone ${milestone.threshold}% not yet achieved`);
         }
+      } else {
+        console.warn(`Milestone element not found: ${milestone.selector}`);
       }
     });
   }
