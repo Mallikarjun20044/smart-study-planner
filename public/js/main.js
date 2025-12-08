@@ -749,6 +749,9 @@ class SmartStudyApp {
    * Update topic progress in LocalStorage
    */
   static updateTopicProgress(subjectIndex, topicIndex, completed) {
+    console.log(`\n📝 TOPIC PROGRESS UPDATE INITIATED`);
+    console.log(`  Subject: ${subjectIndex}, Topic: ${topicIndex}, Completed: ${completed}`);
+    
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const studyPlans = JSON.parse(localStorage.getItem('studyPlans'));
     
@@ -765,19 +768,25 @@ class SmartStudyApp {
       studyPlans[currentUser.id] = userPlan;
       localStorage.setItem('studyPlans', JSON.stringify(studyPlans));
       
-      console.log(`Topic ${topicIndex} in subject ${subjectIndex} marked as ${completed ? 'completed' : 'incomplete'}`);
+      console.log(`✅ Topic saved to localStorage`);
 
-      // Refresh display
+      // Refresh all displays immediately
+      console.log(`🔄 Refreshing all displays...`);
       this.renderProgressChecklist(userPlan);
+      console.log(`  ✓ Checklist rendered`);
       this.renderProgressChart(userPlan);
+      console.log(`  ✓ Chart rendered`);
       this.renderProgressStatistics(userPlan);
+      console.log(`  ✓ Statistics rendered`);
+      
+      console.log(`✅ ALL DISPLAYS UPDATED\n`);
       
       // Try to update dashboard if function exists
       if (typeof this.loadDashboardData === 'function') {
         this.loadDashboardData();
       }
     } else {
-      console.error('Invalid subject or topic index');
+      console.error('Invalid subject or topic index', {subjectIndex, topicIndex});
     }
   }
 
@@ -800,6 +809,11 @@ class SmartStudyApp {
     const completedTopics = studyPlan.subjects.reduce((sum, subject) => {
       return sum + subject.topicsSchedule.filter((t) => t.completed).length;
     }, 0);
+
+    console.log(`\n📊 PROGRESS STATISTICS RENDERING`);
+    console.log(`  Total Topics: ${totalTopics}`);
+    console.log(`  Completed Topics: ${completedTopics}`);
+    console.log(`  Completion %: ${completionPercentage}%`);
 
     let html = `
       <div class="dashboard-grid">
@@ -824,54 +838,72 @@ class SmartStudyApp {
 
     container.innerHTML = html;
     
-    console.log(`Rendering statistics complete. Completion: ${completionPercentage}%, Completed: ${completedTopics}/${totalTopics}`);
+    console.log(`  HTML rendered to progressStats container`);
+    console.log(`  Now calling updateMilestones(${completionPercentage})...`);
     
     // Update milestone highlights immediately
     this.updateMilestones(completionPercentage);
+    console.log(`📊 Statistics rendering complete\n`);
   }
 
   /**
    * Update milestone highlighting based on progress
    */
   static updateMilestones(completionPercentage) {
-    console.log('🎯 Updating milestones. Current progress:', completionPercentage + '%');
+    console.log('🎯 MILESTONE UPDATE TRIGGERED - Progress:', completionPercentage + '%');
     
     const milestones = [
-      { threshold: 25, id: 'milestone-25', color: '0, 212, 255' },
-      { threshold: 50, id: 'milestone-50', color: '92, 93, 255' },
-      { threshold: 75, id: 'milestone-75', color: '255, 184, 0' },
-      { threshold: 100, id: 'milestone-100', color: '0, 245, 160' }
+      { threshold: 25, id: 'milestone-25', rgb: '0, 212, 255' },
+      { threshold: 50, id: 'milestone-50', rgb: '92, 93, 255' },
+      { threshold: 75, id: 'milestone-75', rgb: '255, 184, 0' },
+      { threshold: 100, id: 'milestone-100', rgb: '0, 245, 160' }
     ];
 
     let achievedCount = 0;
     milestones.forEach(milestone => {
       const element = document.getElementById(milestone.id);
+      console.log(`Checking milestone ${milestone.threshold}%:`, element ? 'FOUND' : 'NOT FOUND');
+      
       if (!element) {
-        console.error(`❌ Milestone element not found: ${milestone.id}`);
+        console.error(`❌ CRITICAL: Milestone element ${milestone.id} not found in DOM!`);
         return;
       }
       
       const isAchieved = completionPercentage >= milestone.threshold;
+      console.log(`  - Is ${milestone.threshold}% achieved? ${isAchieved}`);
       
       if (isAchieved) {
         achievedCount++;
-        element.style.opacity = '1';
-        element.style.transform = 'scale(1.08)';
-        element.style.boxShadow = `0 10px 30px rgba(${milestone.color}, 0.5)`;
-        element.style.border = `3px solid rgba(${milestone.color}, 0.8)`;
-        element.style.background = `rgba(${milestone.color}, 0.15)`;
-        console.log(`✅ Milestone ${milestone.threshold}% ACHIEVED!`);
+        // Use setAttribute to force override all inline styles
+        element.setAttribute('style', `
+          text-align: center !important;
+          padding: 20px !important;
+          background: rgba(${milestone.rgb}, 0.2) !important;
+          border-radius: 12px !important;
+          transition: all 0.4s ease !important;
+          opacity: 1 !important;
+          border: 3px solid rgba(${milestone.rgb}, 0.9) !important;
+          transform: scale(1.08) !important;
+          box-shadow: 0 10px 30px rgba(${milestone.rgb}, 0.6) !important;
+        `);
+        console.log(`✅ Milestone ${milestone.threshold}% NOW ACHIEVED AND HIGHLIGHTED!`);
       } else {
-        element.style.opacity = '0.35';
-        element.style.transform = 'scale(1)';
-        element.style.boxShadow = 'none';
-        element.style.border = '2px solid rgba(255, 255, 255, 0.08)';
-        element.style.background = `rgba(${milestone.color}, 0.05)`;
-        console.log(`⏳ Milestone ${milestone.threshold}% not yet reached`);
+        element.setAttribute('style', `
+          text-align: center !important;
+          padding: 20px !important;
+          background: rgba(${milestone.rgb}, 0.03) !important;
+          border-radius: 12px !important;
+          transition: all 0.4s ease !important;
+          opacity: 0.3 !important;
+          border: 2px solid rgba(255, 255, 255, 0.05) !important;
+          transform: scale(1) !important;
+          box-shadow: none !important;
+        `);
+        console.log(`⏳ Milestone ${milestone.threshold}% still locked`);
       }
     });
     
-    console.log(`🏆 ${achievedCount} of ${milestones.length} milestones achieved!`);
+    console.log(`🏆 FINAL: ${achievedCount} of ${milestones.length} milestones achieved!\n`);
   }
 
   /**
