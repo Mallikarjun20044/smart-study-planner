@@ -417,12 +417,13 @@ class SmartStudyApp {
     const chartContainer = document.getElementById('progressChart');
     
     if (!chartContainer) {
-      console.error('❌ Chart container not found!');
+      console.error('❌ Chart container #progressChart not found in DOM!');
       return;
     }
     
     if (!window.Chart) {
-      console.error('❌ Chart.js library not loaded!');
+      console.error('❌ Chart.js library not loaded! Check if CDN link works.');
+      chartContainer.parentElement.innerHTML = '<p style="text-align: center; color: #FFB800;">⚠️ Chart library failed to load. Please refresh the page.</p>';
       return;
     }
 
@@ -709,27 +710,43 @@ class SmartStudyApp {
    * Initialize Progress Page
    */
   static initProgressPage() {
+    console.log('\n🚀 INITIALIZING PROGRESS PAGE...');
+    
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const studyPlans = JSON.parse(localStorage.getItem('studyPlans'));
     
     if (!currentUser) {
-      console.error('No current user found');
+      console.error('❌ No current user found - redirecting to login');
       window.location.href = 'login.html';
       return;
     }
     
+    console.log('✅ User found:', currentUser.name);
+    
     if (!studyPlans || !studyPlans[currentUser.id]) {
-      console.error('No study plan found for user:', currentUser.id);
+      console.error('⚠️ No study plan found for user:', currentUser.id);
+      // Show message but still render empty sections
       document.getElementById('progressStats').innerHTML = '<p style="text-align: center; color: #FFB800;">⚠️ No study plan created yet. <a href="create-plan.html" style="color: #00F5A0;">Create one now!</a></p>';
+      document.getElementById('progressChecklist').innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.5);">No topics to display</p>';
+      // Still render empty milestones
+      this.updateMilestones(0);
       return;
     }
     
     const userPlan = studyPlans[currentUser.id];
-    console.log('Initializing progress page with plan:', userPlan);
+    console.log('✅ Study plan found with', userPlan.subjects.length, 'subjects');
     
+    // Render all sections
+    console.log('📋 Rendering checklist...');
     this.renderProgressChecklist(userPlan);
+    
+    console.log('📊 Rendering chart...');
     this.renderProgressChart(userPlan);
+    
+    console.log('📈 Rendering statistics...');
     this.renderProgressStatistics(userPlan);
+    
+    console.log('✅ PROGRESS PAGE INITIALIZED SUCCESSFULLY\n');
   }
 
   /**
@@ -881,9 +898,13 @@ class SmartStudyApp {
     
     const container = document.getElementById('milestonesContainer');
     if (!container) {
-      console.error('❌ Milestones container not found!');
+      console.error('❌ Milestones container #milestonesContainer not found in DOM!');
+      console.log('DOM ready state:', document.readyState);
+      console.log('Available elements:', document.querySelectorAll('[id]').length);
       return;
     }
+    
+    console.log('✅ Milestones container found, building HTML...');
     
     const milestones = [
       { threshold: 25, emoji: '📚', title: '25% Complete', subtitle: 'Getting Started', rgb: '0, 212, 255' },
