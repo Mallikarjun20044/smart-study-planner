@@ -165,7 +165,8 @@ class SmartStudyApp {
 
     if (loginBtn) {
       loginBtn.addEventListener('click', () => {
-        window.location.href = 'login.html';
+        // Landing page lives at project root; auth pages are under /public
+        window.location.href = '/public/login.html';
       });
     }
 
@@ -173,9 +174,9 @@ class SmartStudyApp {
       createPlanBtn.addEventListener('click', () => {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser) {
-          window.location.href = 'create-plan.html';
+          window.location.href = '/public/create-plan.html';
         } else {
-          window.location.href = 'register.html';
+          window.location.href = '/public/register.html';
         }
       });
     }
@@ -419,14 +420,14 @@ class SmartStudyApp {
     // Prepare data
     const subjectNames = studyPlan.subjects.map((s) => s.name);
     const completedHours = studyPlan.subjects.map((subject) => {
-      return subject.topicsSchedule.filter((t) => t.completed).length > 0
-        ? subject.totalHours
-        : 0;
+      const completed = subject.topicsSchedule.filter((t) => t.completed).length;
+      const total = subject.topicsSchedule.length;
+      return total > 0 ? (completed / total) * subject.totalHours : 0;
     });
     const remainingHours = studyPlan.subjects.map((subject) => {
       const completed = subject.topicsSchedule.filter((t) => t.completed).length;
       const total = subject.topicsSchedule.length;
-      return subject.totalHours - (completed / total) * subject.totalHours;
+      return total > 0 ? subject.totalHours - (completed / total) * subject.totalHours : subject.totalHours;
     });
 
     const ctx = chartContainer.getContext('2d');
@@ -760,29 +761,69 @@ class SmartStudyApp {
 
     const algorithm = new SmartStudyAlgorithm();
     const summary = algorithm.getStudyPlanSummary(studyPlan);
+    const completionPercentage = algorithm.calculateProgress(studyPlan);
+    
+    // Calculate completed topics
+    const totalTopics = studyPlan.subjects.reduce(
+      (sum, subject) => sum + subject.topicsSchedule.length,
+      0
+    );
+    const completedTopics = studyPlan.subjects.reduce((sum, subject) => {
+      return sum + subject.topicsSchedule.filter((t) => t.completed).length;
+    }, 0);
 
     let html = `
       <div class="dashboard-grid">
+        <div class="stat-card">
+          <div class="stat-number">${completionPercentage}%</div>
+          <div class="stat-label">Overall Progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${completedTopics} / ${totalTopics}</div>
+          <div class="stat-label">Topics Completed</div>
+        </div>
         <div class="stat-card">
           <div class="stat-number">${summary.totalSubjects}</div>
           <div class="stat-label">Total Subjects</div>
         </div>
         <div class="stat-card">
           <div class="stat-number">${summary.totalDays}</div>
-          <div class="stat-label">Days Available</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${summary.totalHours}</div>
-          <div class="stat-label">Total Hours</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${summary.averageHoursPerDay}</div>
-          <div class="stat-label">Hours/Day</div>
+          <div class="stat-label">Days Until Exam</div>
         </div>
       </div>
     `;
 
     container.innerHTML = html;
+    
+    // Update milestone highlights
+    this.updateMilestones(completionPercentage);
+  }
+
+  /**
+   * Update milestone highlighting based on progress
+   */
+  static updateMilestones(completionPercentage) {
+    const milestones = [
+      { threshold: 25, selector: 'milestone-25' },
+      { threshold: 50, selector: 'milestone-50' },
+      { threshold: 75, selector: 'milestone-75' },
+      { threshold: 100, selector: 'milestone-100' }
+    ];
+
+    milestones.forEach(milestone => {
+      const element = document.getElementById(milestone.selector);
+      if (element) {
+        if (completionPercentage >= milestone.threshold) {
+          element.style.opacity = '1';
+          element.style.transform = 'scale(1.05)';
+          element.style.boxShadow = '0 8px 16px rgba(0, 245, 160, 0.3)';
+        } else {
+          element.style.opacity = '0.5';
+          element.style.transform = 'scale(1)';
+          element.style.boxShadow = 'none';
+        }
+      }
+    });
   }
 
   /**
