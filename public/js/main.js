@@ -687,19 +687,22 @@ class SmartStudyApp {
     
     if (!currentUser) {
       console.error('No current user found');
+      window.location.href = 'login.html';
+      return;
+    }
+    
+    if (!studyPlans || !studyPlans[currentUser.id]) {
+      console.error('No study plan found for user:', currentUser.id);
+      document.getElementById('progressStats').innerHTML = '<p style="text-align: center; color: #FFB800;">⚠️ No study plan created yet. <a href="create-plan.html" style="color: #00F5A0;">Create one now!</a></p>';
       return;
     }
     
     const userPlan = studyPlans[currentUser.id];
-
-    if (userPlan) {
-      console.log('Initializing progress page with plan:', userPlan);
-      this.renderProgressChecklist(userPlan);
-      this.renderProgressChart(userPlan);
-      this.renderProgressStatistics(userPlan);
-    } else {
-      console.error('No study plan found for user:', currentUser.id);
-    }
+    console.log('Initializing progress page with plan:', userPlan);
+    
+    this.renderProgressChecklist(userPlan);
+    this.renderProgressChart(userPlan);
+    this.renderProgressStatistics(userPlan);
   }
 
   /**
@@ -748,16 +751,33 @@ class SmartStudyApp {
   static updateTopicProgress(subjectIndex, topicIndex, completed) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const studyPlans = JSON.parse(localStorage.getItem('studyPlans'));
+    
+    if (!currentUser || !studyPlans) {
+      console.error('Cannot update progress: missing user or study plans');
+      return;
+    }
+    
     const userPlan = studyPlans[currentUser.id];
 
-    if (userPlan) {
+    if (userPlan && userPlan.subjects[subjectIndex] && userPlan.subjects[subjectIndex].topicsSchedule[topicIndex]) {
+      // Update the topic
       userPlan.subjects[subjectIndex].topicsSchedule[topicIndex].completed = completed;
       studyPlans[currentUser.id] = userPlan;
       localStorage.setItem('studyPlans', JSON.stringify(studyPlans));
+      
+      console.log(`Topic ${topicIndex} in subject ${subjectIndex} marked as ${completed ? 'completed' : 'incomplete'}`);
 
       // Refresh display
-      this.initProgressPage();
-      this.loadDashboardData();
+      this.renderProgressChecklist(userPlan);
+      this.renderProgressChart(userPlan);
+      this.renderProgressStatistics(userPlan);
+      
+      // Try to update dashboard if function exists
+      if (typeof this.loadDashboardData === 'function') {
+        this.loadDashboardData();
+      }
+    } else {
+      console.error('Invalid subject or topic index');
     }
   }
 
@@ -804,47 +824,54 @@ class SmartStudyApp {
 
     container.innerHTML = html;
     
-    // Update milestone highlights after a small delay to ensure DOM is ready
-    setTimeout(() => {
-      this.updateMilestones(completionPercentage);
-    }, 100);
+    console.log(`Rendering statistics complete. Completion: ${completionPercentage}%, Completed: ${completedTopics}/${totalTopics}`);
+    
+    // Update milestone highlights immediately
+    this.updateMilestones(completionPercentage);
   }
 
   /**
    * Update milestone highlighting based on progress
    */
   static updateMilestones(completionPercentage) {
-    console.log('Updating milestones with progress:', completionPercentage + '%');
+    console.log('🎯 Updating milestones. Current progress:', completionPercentage + '%');
     
     const milestones = [
-      { threshold: 25, selector: 'milestone-25', color: 'rgba(0, 212, 255, 0.4)' },
-      { threshold: 50, selector: 'milestone-50', color: 'rgba(92, 93, 255, 0.4)' },
-      { threshold: 75, selector: 'milestone-75', color: 'rgba(255, 184, 0, 0.4)' },
-      { threshold: 100, selector: 'milestone-100', color: 'rgba(0, 245, 160, 0.4)' }
+      { threshold: 25, id: 'milestone-25', color: '0, 212, 255' },
+      { threshold: 50, id: 'milestone-50', color: '92, 93, 255' },
+      { threshold: 75, id: 'milestone-75', color: '255, 184, 0' },
+      { threshold: 100, id: 'milestone-100', color: '0, 245, 160' }
     ];
 
+    let achievedCount = 0;
     milestones.forEach(milestone => {
-      const element = document.getElementById(milestone.selector);
-      if (element) {
-        if (completionPercentage >= milestone.threshold) {
-          // Achieved milestone - highlighted
-          element.style.opacity = '1';
-          element.style.transform = 'scale(1.05)';
-          element.style.boxShadow = `0 8px 20px ${milestone.color}`;
-          element.style.border = '2px solid rgba(0, 245, 160, 0.6)';
-          console.log(`✓ Milestone ${milestone.threshold}% achieved`);
-        } else {
-          // Not achieved - dimmed
-          element.style.opacity = '0.4';
-          element.style.transform = 'scale(1)';
-          element.style.boxShadow = 'none';
-          element.style.border = '2px solid rgba(255, 255, 255, 0.1)';
-          console.log(`✗ Milestone ${milestone.threshold}% not yet achieved`);
-        }
+      const element = document.getElementById(milestone.id);
+      if (!element) {
+        console.error(`❌ Milestone element not found: ${milestone.id}`);
+        return;
+      }
+      
+      const isAchieved = completionPercentage >= milestone.threshold;
+      
+      if (isAchieved) {
+        achievedCount++;
+        element.style.opacity = '1';
+        element.style.transform = 'scale(1.08)';
+        element.style.boxShadow = `0 10px 30px rgba(${milestone.color}, 0.5)`;
+        element.style.border = `3px solid rgba(${milestone.color}, 0.8)`;
+        element.style.background = `rgba(${milestone.color}, 0.15)`;
+        console.log(`✅ Milestone ${milestone.threshold}% ACHIEVED!`);
       } else {
-        console.warn(`Milestone element not found: ${milestone.selector}`);
+        element.style.opacity = '0.35';
+        element.style.transform = 'scale(1)';
+        element.style.boxShadow = 'none';
+        element.style.border = '2px solid rgba(255, 255, 255, 0.08)';
+        element.style.background = `rgba(${milestone.color}, 0.05)`;
+        console.log(`⏳ Milestone ${milestone.threshold}% not yet reached`);
       }
     });
+    
+    console.log(`🏆 ${achievedCount} of ${milestones.length} milestones achieved!`);
   }
 
   /**
