@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Milestones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+        }
+        .milestone {
+            text-align: center;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            opacity: 0.35;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            display: inline-block;
+            min-width: 150px;
+        }
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        input[type="range"] {
+            width: 300px;
+        }
+        .progress-display {
+            font-size: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Milestone Test Page</h1>
+    
+    <div class="progress-display">
+        Progress: <span id="progressValue">0</span>%
+    </div>
+    
+    <div class="controls">
+        <input type="range" id="progressSlider" min="0" max="100" value="0">
+        <p>Move the slider to test milestone highlighting</p>
+    </div>
+    
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <div id="milestone-25" class="milestone" style="background: rgba(0, 212, 255, 0.05);">
+            <div style="font-size: 2.5rem;">📚</div>
+            <strong>25%</strong><br>
+            <span style="font-size: 0.85rem;">Getting Started</span>
+        </div>
+        
+        <div id="milestone-50" class="milestone" style="background: rgba(92, 93, 255, 0.05);">
+            <div style="font-size: 2.5rem;">⚡</div>
+            <strong>50%</strong><br>
+            <span style="font-size: 0.85rem;">Halfway There</span>
+        </div>
+        
+        <div id="milestone-75" class="milestone" style="background: rgba(255, 184, 0, 0.05);">
+            <div style="font-size: 2.5rem;">🚀</div>
+            <strong>75%</strong><br>
+            <span style="font-size: 0.85rem;">Home Stretch</span>
+        </div>
+        
+        <div id="milestone-100" class="milestone" style="background: rgba(0, 245, 160, 0.05);">
+            <div style="font-size: 2.5rem;">🎉</div>
+            <strong>100%</strong><br>
+            <span style="font-size: 0.85rem;">Complete!</span>
+        </div>
+    </div>
+    
+    <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h3>Console Log:</h3>
+        <div id="console" style="font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        function log(message) {
+            const console = document.getElementById('console');
+            const time = new Date().toLocaleTimeString();
+            console.innerHTML += `<div>[${time}] ${message}</div>`;
+            console.scrollTop = console.scrollHeight;
+        }
+        
+        function updateMilestones(completionPercentage) {
+            log(`🎯 Updating milestones. Current progress: ${completionPercentage}%`);
+            
+            const milestones = [
+                { threshold: 25, id: 'milestone-25', color: '0, 212, 255' },
+                { threshold: 50, id: 'milestone-50', color: '92, 93, 255' },
+                { threshold: 75, id: 'milestone-75', color: '255, 184, 0' },
+                { threshold: 100, id: 'milestone-100', color: '0, 245, 160' }
+            ];
+
+            let achievedCount = 0;
+            milestones.forEach(milestone => {
+                const element = document.getElementById(milestone.id);
+                if (!element) {
+                    log(`❌ Milestone element not found: ${milestone.id}`);
+                    return;
+                }
+                
+                const isAchieved = completionPercentage >= milestone.threshold;
+                
+                if (isAchieved) {
+                    achievedCount++;
+                    element.style.opacity = '1';
+                    element.style.transform = 'scale(1.08)';
+                    element.style.boxShadow = `0 10px 30px rgba(${milestone.color}, 0.5)`;
+                    element.style.border = `3px solid rgba(${milestone.color}, 0.8)`;
+                    element.style.background = `rgba(${milestone.color}, 0.15)`;
+                    log(`✅ Milestone ${milestone.threshold}% ACHIEVED!`);
+                } else {
+                    element.style.opacity = '0.35';
+                    element.style.transform = 'scale(1)';
+                    element.style.boxShadow = 'none';
+                    element.style.border = '2px solid rgba(255, 255, 255, 0.08)';
+                    element.style.background = `rgba(${milestone.color}, 0.05)`;
+                    log(`⏳ Milestone ${milestone.threshold}% not yet reached`);
+                }
+            });
+            
+            log(`🏆 ${achievedCount} of ${milestones.length} milestones achieved!`);
+        }
+        
+        const slider = document.getElementById('progressSlider');
+        const progressValue = document.getElementById('progressValue');
+        
+        slider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            progressValue.textContent = value;
+            updateMilestones(value);
+        });
+        
+        // Initial update
+        log('🚀 Test page loaded. Move slider to test milestones.');
+        updateMilestones(0);
+    </script>
+</body>
+</html>
