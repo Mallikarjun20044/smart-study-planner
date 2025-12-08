@@ -853,16 +853,16 @@ class SmartStudyApp {
     console.log('🎯 MILESTONE UPDATE TRIGGERED - Progress:', completionPercentage + '%');
     
     const milestones = [
-      { threshold: 25, id: 'milestone-25', rgb: '0, 212, 255' },
-      { threshold: 50, id: 'milestone-50', rgb: '92, 93, 255' },
-      { threshold: 75, id: 'milestone-75', rgb: '255, 184, 0' },
-      { threshold: 100, id: 'milestone-100', rgb: '0, 245, 160' }
+      { threshold: 25, id: 'milestone-25', emoji: '📚', title: '25% Complete', subtitle: 'Getting Started', rgb: '0, 212, 255' },
+      { threshold: 50, id: 'milestone-50', emoji: '⚡', title: '50% Complete', subtitle: 'Halfway There', rgb: '92, 93, 255' },
+      { threshold: 75, id: 'milestone-75', emoji: '🚀', title: '75% Complete', subtitle: 'In the Home Stretch', rgb: '255, 184, 0' },
+      { threshold: 100, id: 'milestone-100', emoji: '🎉', title: '100% Complete', subtitle: 'Ready for Exam!', rgb: '0, 245, 160' }
     ];
 
     let achievedCount = 0;
+    
     milestones.forEach(milestone => {
       const element = document.getElementById(milestone.id);
-      console.log(`Checking milestone ${milestone.threshold}%:`, element ? 'FOUND' : 'NOT FOUND');
       
       if (!element) {
         console.error(`❌ CRITICAL: Milestone element ${milestone.id} not found in DOM!`);
@@ -870,11 +870,19 @@ class SmartStudyApp {
       }
       
       const isAchieved = completionPercentage >= milestone.threshold;
-      console.log(`  - Is ${milestone.threshold}% achieved? ${isAchieved}`);
+      console.log(`Checking ${milestone.threshold}%: ${isAchieved ? '✅ ACHIEVED' : '⏳ LOCKED'}`);
       
       if (isAchieved) {
         achievedCount++;
-        // Use setAttribute to force override all inline styles
+        // BUILD HTML FOR ACHIEVED MILESTONE
+        element.innerHTML = `
+          <div style="font-size: 2.5rem; margin-bottom: 10px;">${milestone.emoji}</div>
+          <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.9);">
+            <strong>${milestone.title}</strong><br />
+            <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">${milestone.subtitle}</span>
+          </p>
+        `;
+        // SET STYLES FOR ACHIEVED
         element.setAttribute('style', `
           text-align: center !important;
           padding: 20px !important;
@@ -886,8 +894,17 @@ class SmartStudyApp {
           transform: scale(1.08) !important;
           box-shadow: 0 10px 30px rgba(${milestone.rgb}, 0.6) !important;
         `);
-        console.log(`✅ Milestone ${milestone.threshold}% NOW ACHIEVED AND HIGHLIGHTED!`);
+        console.log(`✅ Milestone ${milestone.threshold}% ACHIEVED AND UPDATED!`);
       } else {
+        // BUILD HTML FOR UNACHIEVED MILESTONE
+        element.innerHTML = `
+          <div style="font-size: 2.5rem; margin-bottom: 10px;">${milestone.emoji}</div>
+          <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.9);">
+            <strong>${milestone.title}</strong><br />
+            <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">${milestone.subtitle}</span>
+          </p>
+        `;
+        // SET STYLES FOR UNACHIEVED
         element.setAttribute('style', `
           text-align: center !important;
           padding: 20px !important;
