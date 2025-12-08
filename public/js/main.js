@@ -415,14 +415,27 @@ class SmartStudyApp {
    */
   static renderProgressChart(studyPlan) {
     const chartContainer = document.getElementById('progressChart');
-    if (!chartContainer || !window.Chart) return;
+    
+    if (!chartContainer) {
+      console.error('❌ Chart container not found!');
+      return;
+    }
+    
+    if (!window.Chart) {
+      console.error('❌ Chart.js library not loaded!');
+      return;
+    }
+
+    console.log('📊 Rendering progress chart...');
 
     // Prepare data
     const subjectNames = studyPlan.subjects.map((s) => s.name);
     const completedHours = studyPlan.subjects.map((subject) => {
       const completed = subject.topicsSchedule.filter((t) => t.completed).length;
       const total = subject.topicsSchedule.length;
-      return total > 0 ? (completed / total) * subject.totalHours : 0;
+      const hours = total > 0 ? (completed / total) * subject.totalHours : 0;
+      console.log(`  ${subject.name}: ${completed}/${total} topics = ${hours.toFixed(1)}h completed`);
+      return hours;
     });
     const remainingHours = studyPlan.subjects.map((subject) => {
       const completed = subject.topicsSchedule.filter((t) => t.completed).length;
@@ -432,10 +445,13 @@ class SmartStudyApp {
 
     const ctx = chartContainer.getContext('2d');
 
+    // Destroy existing chart if it exists
     if (window.progressChart) {
+      console.log('  Destroying old chart...');
       window.progressChart.destroy();
     }
 
+    console.log('  Creating new chart...');
     window.progressChart = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -463,6 +479,8 @@ class SmartStudyApp {
         indexAxis: 'y',
         plugins: {
           legend: {
+            display: true,
+            position: 'top',
             labels: {
               color: '#F5F5FF',
               font: {
@@ -473,6 +491,7 @@ class SmartStudyApp {
         },
         scales: {
           x: {
+            stacked: false,
             ticks: {
               color: '#F5F5FF',
             },
@@ -481,6 +500,7 @@ class SmartStudyApp {
             },
           },
           y: {
+            stacked: false,
             ticks: {
               color: '#F5F5FF',
             },
@@ -489,8 +509,15 @@ class SmartStudyApp {
             },
           },
         },
+        animation: {
+          duration: 750,
+        },
       },
     });
+    
+    // Force update
+    window.progressChart.update('active');
+    console.log('✅ Chart rendered and updated successfully!');
   }
 
   /**
