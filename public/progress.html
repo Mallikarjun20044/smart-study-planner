@@ -91,7 +91,10 @@
 
       <!-- Progress Chart -->
       <div class="card" style="margin: 30px 0;">
-        <h2 style="margin-bottom: 20px;">📊 Subject-wise Progress</h2>
+        <h2 style="margin-bottom: 20px;">📊 Subject Progress Chart</h2>
+        <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px; font-size: 0.9rem;">
+          Visual breakdown of completed vs remaining hours for each subject
+        </p>
         <div style="position: relative; height: 300px;">
           <canvas id="progressChart"></canvas>
         </div>
@@ -113,40 +116,16 @@
         <h2 style="margin-bottom: 20px;">🏆 Milestones</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
           <!-- 25% Complete -->
-          <div style="text-align: center; padding: 20px; background: rgba(0, 212, 255, 0.05); border-radius: 12px; border-left: 4px solid #00D4FF;">
-            <div style="font-size: 2rem; margin-bottom: 10px;">📚</div>
-            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">
-              <strong>25% Complete</strong><br />
-              <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Getting Started</span>
-            </p>
-          </div>
+          <div id="milestone-25"></div>
 
           <!-- 50% Complete -->
-          <div style="text-align: center; padding: 20px; background: rgba(92, 93, 255, 0.05); border-radius: 12px; border-left: 4px solid #5C5DFF;">
-            <div style="font-size: 2rem; margin-bottom: 10px;">⚡</div>
-            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">
-              <strong>50% Complete</strong><br />
-              <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Halfway There</span>
-            </p>
-          </div>
+          <div id="milestone-50"></div>
 
           <!-- 75% Complete -->
-          <div style="text-align: center; padding: 20px; background: rgba(255, 184, 0, 0.05); border-radius: 12px; border-left: 4px solid #FFB800;">
-            <div style="font-size: 2rem; margin-bottom: 10px;">🚀</div>
-            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">
-              <strong>75% Complete</strong><br />
-              <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">In the Home Stretch</span>
-            </p>
-          </div>
+          <div id="milestone-75"></div>
 
           <!-- 100% Complete -->
-          <div style="text-align: center; padding: 20px; background: rgba(0, 245, 160, 0.05); border-radius: 12px; border-left: 4px solid #00F5A0;">
-            <div style="font-size: 2rem; margin-bottom: 10px;">🎉</div>
-            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">
-              <strong>100% Complete</strong><br />
-              <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Ready for Exam!</span>
-            </p>
-          </div>
+          <div id="milestone-100"></div>
         </div>
       </div>
 
