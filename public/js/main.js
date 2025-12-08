@@ -1075,29 +1075,34 @@ class SmartStudyApp {
     alert.textContent = message;
     alert.style.cssText = `
       position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 15px 20px;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 16px 24px;
       background: ${
-        type === 'success' ? 'rgba(0, 245, 160, 0.2)' : type === 'error' ? 'rgba(255, 0, 110, 0.2)' : 'rgba(92, 93, 255, 0.2)'
+        type === 'success' ? 'rgba(0, 245, 160, 0.15)' : type === 'error' ? 'rgba(255, 0, 110, 0.15)' : 'rgba(92, 93, 255, 0.15)'
       };
-      border-left: 4px solid ${
+      border: 2px solid ${
         type === 'success' ? '#00F5A0' : type === 'error' ? '#FF006E' : '#5C5DFF'
       };
+      border-radius: 12px;
       color: ${type === 'success' ? '#00F5A0' : type === 'error' ? '#FF006E' : '#5C5DFF'};
-      border-radius: 8px;
+      font-weight: 600;
       z-index: 9999;
-      animation: slideInRight 0.3s ease-out;
-      max-width: 400px;
+      animation: slideDown 0.4s ease-out;
+      max-width: 500px;
+      min-width: 300px;
+      box-shadow: 0 10px 40px rgba(${type === 'success' ? '0, 245, 160' : type === 'error' ? '255, 0, 110' : '92, 93, 255'}, 0.3);
+      backdrop-filter: blur(10px);
     `;
 
     document.body.appendChild(alert);
 
-    // Remove after 3 seconds
+    // Remove after 4 seconds
     setTimeout(() => {
-      alert.style.animation = 'slideInLeft 0.3s ease-out reverse';
-      setTimeout(() => alert.remove(), 300);
-    }, 3000);
+      alert.style.animation = 'slideUp 0.4s ease-out';
+      setTimeout(() => alert.remove(), 400);
+    }, 4000);
   }
 
   /**
