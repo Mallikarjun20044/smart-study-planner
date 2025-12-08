@@ -930,7 +930,7 @@ class SmartStudyApp {
   }
 
   /**
-   * Render and update milestone cards based on progress
+   * Render and update milestone timeline based on progress
    */
   static updateMilestones(completionPercentage) {
     console.log('🎯 MILESTONE UPDATE TRIGGERED - Progress:', completionPercentage + '%');
@@ -943,70 +943,125 @@ class SmartStudyApp {
       return;
     }
     
-    console.log('✅ Milestones container found, building HTML...');
+    console.log('✅ Milestones container found, building timeline HTML...');
     
     const milestones = [
-      { threshold: 25, emoji: '📚', title: '25% Complete', subtitle: 'Getting Started', rgb: '0, 212, 255' },
-      { threshold: 50, emoji: '⚡', title: '50% Complete', subtitle: 'Halfway There', rgb: '92, 93, 255' },
-      { threshold: 75, emoji: '🚀', title: '75% Complete', subtitle: 'In the Home Stretch', rgb: '255, 184, 0' },
-      { threshold: 100, emoji: '🎉', title: '100% Complete', subtitle: 'Ready for Exam!', rgb: '0, 245, 160' }
+      { threshold: 0, emoji: '🎯', title: 'Start', subtitle: 'Begin Journey', color: '#00D4FF' },
+      { threshold: 25, emoji: '📚', title: '25%', subtitle: 'Getting Started', color: '#00D4FF' },
+      { threshold: 50, emoji: '⚡', title: '50%', subtitle: 'Halfway There', color: '#5C5DFF' },
+      { threshold: 75, emoji: '🚀', title: '75%', subtitle: 'Home Stretch', color: '#FFB800' },
+      { threshold: 100, emoji: '🎉', title: '100%', subtitle: 'Complete!', color: '#00F5A0' }
     ];
 
     let achievedCount = 0;
-    let milestonesHTML = '';
     
-    milestones.forEach(milestone => {
+    // Build timeline HTML
+    let timelineHTML = '<div style="position: relative; padding: 40px 0;">';
+    
+    // Progress bar background
+    timelineHTML += `
+      <div style="
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        z-index: 1;
+      "></div>
+    `;
+    
+    // Active progress bar (fills based on completion)
+    const progressWidth = Math.min(completionPercentage, 100);
+    timelineHTML += `
+      <div style="
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: ${progressWidth}%;
+        height: 6px;
+        background: linear-gradient(90deg, #00D4FF, #5C5DFF, #FFB800, #00F5A0);
+        border-radius: 3px;
+        z-index: 2;
+        transition: width 0.8s ease;
+        box-shadow: 0 0 20px rgba(0, 245, 160, 0.5);
+      "></div>
+    `;
+    
+    // Milestone markers
+    timelineHTML += '<div style="position: relative; display: flex; justify-content: space-between; z-index: 3;">';
+    
+    milestones.forEach((milestone, index) => {
       const isAchieved = completionPercentage >= milestone.threshold;
+      const isCurrent = completionPercentage >= milestone.threshold && 
+                       (index === milestones.length - 1 || completionPercentage < milestones[index + 1].threshold);
       
-      if (isAchieved) {
-        achievedCount++;
-        // ACHIEVED MILESTONE - Bright and glowing
-        milestonesHTML += `
+      if (isAchieved) achievedCount++;
+      
+      timelineHTML += `
+        <div style="
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+        ">
+          <!-- Milestone Marker -->
           <div style="
-            text-align: center;
-            padding: 20px;
-            background: rgba(${milestone.rgb}, 0.2);
-            border-radius: 12px;
+            width: ${isCurrent ? '50px' : '40px'};
+            height: ${isCurrent ? '50px' : '40px'};
+            background: ${isAchieved ? milestone.color : 'rgba(255, 255, 255, 0.1)'};
+            border: 4px solid ${isAchieved ? milestone.color : 'rgba(255, 255, 255, 0.2)'};
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: ${isCurrent ? '1.8rem' : '1.5rem'};
             transition: all 0.4s ease;
-            opacity: 1;
-            border: 3px solid rgba(${milestone.rgb}, 0.9);
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(${milestone.rgb}, 0.6);
+            box-shadow: ${isAchieved ? `0 0 25px ${milestone.color}` : 'none'};
+            z-index: 10;
+            ${isCurrent ? 'animation: pulse 2s infinite;' : ''}
           ">
-            <div style="font-size: 2.5rem; margin-bottom: 10px;">${milestone.emoji}</div>
-            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 1); margin: 0;">
-              <strong>${milestone.title}</strong><br />
-              <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.85rem;">✅ ${milestone.subtitle}</span>
-            </p>
+            ${isAchieved ? milestone.emoji : '🔒'}
           </div>
-        `;
-        console.log(`✅ ${milestone.threshold}% ACHIEVED!`);
-      } else {
-        // UNACHIEVED MILESTONE - Dimmed and locked
-        milestonesHTML += `
+          
+          <!-- Milestone Label -->
           <div style="
+            margin-top: 15px;
             text-align: center;
-            padding: 20px;
-            background: rgba(${milestone.rgb}, 0.03);
-            border-radius: 12px;
             transition: all 0.4s ease;
-            opacity: 0.35;
-            border: 2px solid rgba(255, 255, 255, 0.08);
-            transform: scale(1);
-            box-shadow: none;
           ">
-            <div style="font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5;">${milestone.emoji}</div>
-            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); margin: 0;">
-              <strong>${milestone.title}</strong><br />
-              <span style="color: rgba(255, 255, 255, 0.4); font-size: 0.85rem;">🔒 ${milestone.subtitle}</span>
-            </p>
+            <div style="
+              font-size: 0.95rem;
+              font-weight: bold;
+              color: ${isAchieved ? milestone.color : 'rgba(255, 255, 255, 0.4)'};
+              margin-bottom: 5px;
+            ">${milestone.title}</div>
+            <div style="
+              font-size: 0.8rem;
+              color: ${isAchieved ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.3)'};
+            ">${isAchieved ? '✅' : ''} ${milestone.subtitle}</div>
           </div>
-        `;
-        console.log(`⏳ ${milestone.threshold}% locked`);
-      }
+        </div>
+      `;
+      
+      console.log(`${isAchieved ? '✅' : '⏳'} ${milestone.threshold}% ${isCurrent ? '(CURRENT)' : ''}`);
     });
     
-    container.innerHTML = milestonesHTML;
+    timelineHTML += '</div></div>';
+    
+    // Add pulse animation
+    timelineHTML += `
+      <style>
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+      </style>
+    `;
+    
+    container.innerHTML = timelineHTML;
     console.log(`🏆 ${achievedCount} of ${milestones.length} milestones achieved!\n`);
   }
 
