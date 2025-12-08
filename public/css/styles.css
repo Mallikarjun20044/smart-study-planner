@@ -285,6 +285,25 @@ select {
   background-repeat: no-repeat;
   background-position: right var(--spacing-sm) center;
   padding-right: 2.5rem;
+  background-color: rgba(92, 93, 255, 0.15) !important;
+  border: 2px solid var(--secondary) !important;
+}
+
+select option {
+  background: rgba(15, 20, 25, 0.95);
+  color: var(--lighter);
+  padding: 10px;
+}
+
+select option:checked {
+  background: linear-gradient(#5C5DFF, #5C5DFF);
+  background-color: var(--primary) !important;
+  color: white;
+}
+
+select:hover {
+  border-color: var(--primary) !important;
+  background-color: rgba(92, 93, 255, 0.25) !important;
 }
 
 /* ===============================
@@ -1124,7 +1143,54 @@ nav {
 }
 
 /* ===============================
-   18. PRINT STYLES
+   18. MILESTONE TIMELINE STYLES
+   =============================== */
+
+#milestonesContainer {
+  width: 100%;
+  overflow-x: auto;
+  padding: 20px 10px;
+}
+
+#milestonesContainer > div {
+  width: 100%;
+  position: relative;
+  padding: 40px 0;
+  min-height: 200px;
+}
+
+#milestonesContainer .progress-line-bg {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  z-index: 1;
+}
+
+#milestonesContainer .progress-line-fill {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #00D4FF, #5C5DFF, #FFB800, #00F5A0);
+  border-radius: 3px;
+  z-index: 2;
+  transition: width 0.8s ease;
+  box-shadow: 0 0 20px rgba(0, 245, 160, 0.5);
+}
+
+#milestonesContainer > div > div:last-child {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  z-index: 3;
+}
+
+/* ===============================
+   19. PRINT STYLES
    =============================== */
 
 @media print {
