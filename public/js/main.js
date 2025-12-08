@@ -847,80 +847,80 @@ class SmartStudyApp {
   }
 
   /**
-   * Update milestone highlighting based on progress
+   * Render and update milestone cards based on progress
    */
   static updateMilestones(completionPercentage) {
     console.log('🎯 MILESTONE UPDATE TRIGGERED - Progress:', completionPercentage + '%');
     
+    const container = document.getElementById('milestonesContainer');
+    if (!container) {
+      console.error('❌ Milestones container not found!');
+      return;
+    }
+    
     const milestones = [
-      { threshold: 25, id: 'milestone-25', emoji: '📚', title: '25% Complete', subtitle: 'Getting Started', rgb: '0, 212, 255' },
-      { threshold: 50, id: 'milestone-50', emoji: '⚡', title: '50% Complete', subtitle: 'Halfway There', rgb: '92, 93, 255' },
-      { threshold: 75, id: 'milestone-75', emoji: '🚀', title: '75% Complete', subtitle: 'In the Home Stretch', rgb: '255, 184, 0' },
-      { threshold: 100, id: 'milestone-100', emoji: '🎉', title: '100% Complete', subtitle: 'Ready for Exam!', rgb: '0, 245, 160' }
+      { threshold: 25, emoji: '📚', title: '25% Complete', subtitle: 'Getting Started', rgb: '0, 212, 255' },
+      { threshold: 50, emoji: '⚡', title: '50% Complete', subtitle: 'Halfway There', rgb: '92, 93, 255' },
+      { threshold: 75, emoji: '🚀', title: '75% Complete', subtitle: 'In the Home Stretch', rgb: '255, 184, 0' },
+      { threshold: 100, emoji: '🎉', title: '100% Complete', subtitle: 'Ready for Exam!', rgb: '0, 245, 160' }
     ];
 
     let achievedCount = 0;
+    let milestonesHTML = '';
     
     milestones.forEach(milestone => {
-      const element = document.getElementById(milestone.id);
-      
-      if (!element) {
-        console.error(`❌ CRITICAL: Milestone element ${milestone.id} not found in DOM!`);
-        return;
-      }
-      
       const isAchieved = completionPercentage >= milestone.threshold;
-      console.log(`Checking ${milestone.threshold}%: ${isAchieved ? '✅ ACHIEVED' : '⏳ LOCKED'}`);
       
       if (isAchieved) {
         achievedCount++;
-        // BUILD HTML FOR ACHIEVED MILESTONE
-        element.innerHTML = `
-          <div style="font-size: 2.5rem; margin-bottom: 10px;">${milestone.emoji}</div>
-          <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.9);">
-            <strong>${milestone.title}</strong><br />
-            <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">${milestone.subtitle}</span>
-          </p>
+        // ACHIEVED MILESTONE - Bright and glowing
+        milestonesHTML += `
+          <div style="
+            text-align: center;
+            padding: 20px;
+            background: rgba(${milestone.rgb}, 0.2);
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            opacity: 1;
+            border: 3px solid rgba(${milestone.rgb}, 0.9);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(${milestone.rgb}, 0.6);
+          ">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">${milestone.emoji}</div>
+            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 1); margin: 0;">
+              <strong>${milestone.title}</strong><br />
+              <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.85rem;">✅ ${milestone.subtitle}</span>
+            </p>
+          </div>
         `;
-        // SET STYLES FOR ACHIEVED
-        element.setAttribute('style', `
-          text-align: center !important;
-          padding: 20px !important;
-          background: rgba(${milestone.rgb}, 0.2) !important;
-          border-radius: 12px !important;
-          transition: all 0.4s ease !important;
-          opacity: 1 !important;
-          border: 3px solid rgba(${milestone.rgb}, 0.9) !important;
-          transform: scale(1.08) !important;
-          box-shadow: 0 10px 30px rgba(${milestone.rgb}, 0.6) !important;
-        `);
-        console.log(`✅ Milestone ${milestone.threshold}% ACHIEVED AND UPDATED!`);
+        console.log(`✅ ${milestone.threshold}% ACHIEVED!`);
       } else {
-        // BUILD HTML FOR UNACHIEVED MILESTONE
-        element.innerHTML = `
-          <div style="font-size: 2.5rem; margin-bottom: 10px;">${milestone.emoji}</div>
-          <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.9);">
-            <strong>${milestone.title}</strong><br />
-            <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">${milestone.subtitle}</span>
-          </p>
+        // UNACHIEVED MILESTONE - Dimmed and locked
+        milestonesHTML += `
+          <div style="
+            text-align: center;
+            padding: 20px;
+            background: rgba(${milestone.rgb}, 0.03);
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            opacity: 0.35;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            transform: scale(1);
+            box-shadow: none;
+          ">
+            <div style="font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5;">${milestone.emoji}</div>
+            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); margin: 0;">
+              <strong>${milestone.title}</strong><br />
+              <span style="color: rgba(255, 255, 255, 0.4); font-size: 0.85rem;">🔒 ${milestone.subtitle}</span>
+            </p>
+          </div>
         `;
-        // SET STYLES FOR UNACHIEVED
-        element.setAttribute('style', `
-          text-align: center !important;
-          padding: 20px !important;
-          background: rgba(${milestone.rgb}, 0.03) !important;
-          border-radius: 12px !important;
-          transition: all 0.4s ease !important;
-          opacity: 0.3 !important;
-          border: 2px solid rgba(255, 255, 255, 0.05) !important;
-          transform: scale(1) !important;
-          box-shadow: none !important;
-        `);
-        console.log(`⏳ Milestone ${milestone.threshold}% still locked`);
+        console.log(`⏳ ${milestone.threshold}% locked`);
       }
     });
     
-    console.log(`🏆 FINAL: ${achievedCount} of ${milestones.length} milestones achieved!\n`);
+    container.innerHTML = milestonesHTML;
+    console.log(`🏆 ${achievedCount} of ${milestones.length} milestones achieved!\n`);
   }
 
   /**
