@@ -444,81 +444,120 @@ class SmartStudyApp {
       return total > 0 ? subject.totalHours - (completed / total) * subject.totalHours : subject.totalHours;
     });
 
-    const ctx = chartContainer.getContext('2d');
+    try {
+      const ctx = chartContainer.getContext('2d');
+      
+      if (!ctx) {
+        console.error('❌ Failed to get canvas 2D context!');
+        return;
+      }
 
-    // Destroy existing chart if it exists
-    if (window.progressChart) {
-      console.log('  Destroying old chart...');
-      window.progressChart.destroy();
-    }
+      // Destroy existing chart if it exists
+      if (window.progressChart) {
+        console.log('  Destroying old chart...');
+        try {
+          window.progressChart.destroy();
+        } catch (e) {
+          console.warn('Warning destroying old chart:', e);
+        }
+      }
 
-    console.log('  Creating new chart...');
-    window.progressChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: subjectNames,
-        datasets: [
-          {
-            label: 'Completed Hours',
-            data: completedHours,
-            backgroundColor: 'rgba(0, 245, 160, 0.8)',
-            borderColor: '#00F5A0',
-            borderWidth: 2,
+      console.log('  Creating new chart with data:', { subjectNames, completedHours, remainingHours });
+      
+      window.progressChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: subjectNames,
+          datasets: [
+            {
+              label: 'Completed Hours',
+              data: completedHours,
+              backgroundColor: 'rgba(0, 245, 160, 0.8)',
+              borderColor: '#00F5A0',
+              borderWidth: 2,
+            },
+            {
+              label: 'Remaining Hours',
+              data: remainingHours,
+              backgroundColor: 'rgba(92, 93, 255, 0.8)',
+              borderColor: '#5C5DFF',
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: '#F5F5FF',
+                font: {
+                  size: 12,
+                },
+                padding: 15,
+              },
+            },
+            tooltip: {
+              enabled: true,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              padding: 12,
+              titleColor: '#fff',
+              bodyColor: '#fff',
+            },
           },
-          {
-            label: 'Remaining Hours',
-            data: remainingHours,
-            backgroundColor: 'rgba(92, 93, 255, 0.8)',
-            borderColor: '#5C5DFF',
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        indexAxis: 'y',
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            labels: {
-              color: '#F5F5FF',
-              font: {
-                size: 12,
+          scales: {
+            x: {
+              stacked: false,
+              beginAtZero: true,
+              ticks: {
+                color: '#F5F5FF',
+                font: {
+                  size: 11,
+                },
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)',
+              },
+              title: {
+                display: true,
+                text: 'Hours',
+                color: '#F5F5FF',
+              },
+            },
+            y: {
+              stacked: false,
+              ticks: {
+                color: '#F5F5FF',
+                font: {
+                  size: 11,
+                },
+              },
+              grid: {
+                color: 'rgba(255,255,255,0.1)',
               },
             },
           },
-        },
-        scales: {
-          x: {
-            stacked: false,
-            ticks: {
-              color: '#F5F5FF',
-            },
-            grid: {
-              color: 'rgba(255,255,255,0.1)',
-            },
-          },
-          y: {
-            stacked: false,
-            ticks: {
-              color: '#F5F5FF',
-            },
-            grid: {
-              color: 'rgba(255,255,255,0.1)',
-            },
+          animation: {
+            duration: 750,
           },
         },
-        animation: {
-          duration: 750,
-        },
-      },
-    });
-    
-    // Force update
-    window.progressChart.update('active');
-    console.log('✅ Chart rendered and updated successfully!');
+      });
+      
+      console.log('  Chart object created, forcing update...');
+      // Force update with default mode
+      window.progressChart.update();
+      console.log('✅ Chart rendered and updated successfully!');
+      
+    } catch (error) {
+      console.error('❌ ERROR creating chart:', error);
+      console.error('Error details:', error.message);
+      console.error('Stack:', error.stack);
+      chartContainer.parentElement.innerHTML = `<p style="text-align: center; color: #FF006E;">❌ Chart error: ${error.message}</p>`;
+    }
   }
 
   /**
